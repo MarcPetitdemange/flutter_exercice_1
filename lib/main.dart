@@ -1,6 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_exercice/model.dart';
+
+
+Auteur marc = Auteur("PETITDEMANGE", "Marc", "https://images.pexels.com/photos/15960020/pexels-photo-15960020/free-photo-of-mer-aube-paysage-soleil-couchant.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+Auteur lena = Auteur("BONFILS", "Léna", "https://images.pexels.com/photos/15045104/pexels-photo-15045104/free-photo-of-costume-femme-debout-fleur.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load");
+
+
+PostInformations postInformations = PostInformations("https://images.pexels.com/photos/16889399/pexels-photo-16889399/free-photo-of-lumineux-aube-paysage-nature.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load", marc, "Seul sur le sable, les yeux dans l'eau, mon rêve était trop beau...", 12, 13, DateTime.now());
+PostInformations postInformations2 = PostInformations("https://images.pexels.com/photos/2883135/pexels-photo-2883135.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load", lena, "Oh macumba macumba...", 63, 22,  DateTime.now());
+PostInformations postInformations3 = PostInformations("https://images.pexels.com/photos/16948623/pexels-photo-16948623.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load", lena, "Allez venez milor, vous asseoir à ma table !", 584, 123,  DateTime.now());
 
 void main() {
   runApp(const MyApp());
@@ -49,10 +59,22 @@ class Basics extends StatelessWidget {
                   ),
                   Padding(
                       padding: EdgeInsets.only(top: 140),
-                      child: CircleAvatar(
-                        radius: 60,
-                        foregroundImage: networkImage(),
-                      )
+                      child:
+                        Container(
+                          width: 110,
+                          height: 110,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 4.0,
+                                color: Colors.white
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: networkImage()
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(60.0))
+                          ),
+                        )
                   ),
                 ],
               ),
@@ -116,7 +138,10 @@ class Basics extends StatelessWidget {
                   stackImageWomen(size),
                   stackImageWomen(size)
                 ],
-              )
+              ),
+              post(postInformations),
+              post(postInformations2),
+              post(postInformations3),
             ],
           ),
       ),
@@ -189,4 +214,58 @@ Stack stackImageWomen(Size size){
       )
     ],
   );
+}
+
+
+
+Container post(PostInformations postInformations){
+    return Container(
+      color: Colors.teal,
+      margin: EdgeInsets.only(top: 5, bottom: 5),
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    foregroundImage: NetworkImage(postInformations.auteur.avatar),
+                  ),
+                  Text(postInformations.auteur.nom.toUpperCase() + "" + postInformations.auteur.prenom,),
+                ],
+              ),
+              Text("Il y'a " + postInformations.dateTime.hour.toString() + " heures")
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            height: 400,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(postInformations.imageAdresse.toString())
+              )
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              postInformations.description,
+              textAlign: TextAlign.left,
+            ),
+          ),
+          Row(
+           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+           children: [
+             Icon(Icons.favorite),
+             Text(postInformations.nbLikes.toString() + " likes"),
+             Icon(Icons.comment),
+             Text(postInformations.nbCommentaires.toString() + " Commentaires")
+           ],
+          )
+        ],
+      ),
+    );
 }
